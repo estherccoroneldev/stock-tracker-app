@@ -1,13 +1,12 @@
+import { AddAlert } from '@/components/AddAlert';
 import { StatusBar } from 'expo-status-bar';
 import { Platform } from 'react-native';
 
-import { ScreenContent } from '@/components/ScreenContent';
-
-export default function Modal() {
+export default function SetPriceAlert() {
   return (
     <>
-      <ScreenContent path="app/modal.tsx" title="Modal"></ScreenContent>
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      <AddAlert />
     </>
   );
 }
