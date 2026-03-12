@@ -21,8 +21,6 @@ export const AddAlert = () => {
 
   return (
     <YStack f={1} p="$4" gap="$4" jc="center">
-      <H2 ta="center">Set Price Alert</H2>
-
       <Form
         onSubmit={handleSave}
         gap="$4"
@@ -55,7 +53,7 @@ export const AddAlert = () => {
                 <Select.Group>
                   {DEFAULT_SYMBOLS.map((item, i) => (
                     <Select.Item index={i} key={item} value={item}>
-                      <Select.ItemText>{item}</Select.ItemText>
+                      <Select.ItemText size={'$8'}>{item}</Select.ItemText>
                     </Select.Item>
                   ))}
                 </Select.Group>

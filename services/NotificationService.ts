@@ -9,11 +9,10 @@ export const setupNotifications = async () => {
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
       shouldPlaySound: true,
       shouldSetBadge: true,
       shouldShowBanner: true,
-      shouldShowList: false,
+      shouldShowList: true,
       priority: Notifications.AndroidNotificationPriority.MAX,
     }),
   });
