@@ -1,4 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface StockState {
   prices: Record<string, number>;
@@ -9,31 +11,43 @@ interface StockState {
   basePrices: Record<string, number>;
 }
 
-export const useStockStore = create<StockState>((set) => ({
-  prices: {},
-  basePrices: {},
-  alerts: { AAPL: 260 },
-  setPrice: (symbol, price) =>
-    set((state) => {
-      const isFirstPrice = !state.basePrices[symbol];
-      const newBasePrices = isFirstPrice
-        ? { ...state.basePrices, [symbol]: price }
-        : state.basePrices;
+export const useStockStore = create<StockState>()(
+  persist(
+    (set) => ({
+      prices: {},
+      basePrices: {},
+      alerts: {},
+      setPrice: (symbol, price) =>
+        set((state) => {
+          const isFirstPrice = !state.basePrices[symbol];
+          const newBasePrices = isFirstPrice
+            ? { ...state.basePrices, [symbol]: price }
+            : state.basePrices;
 
-      return {
-        prices: { ...state.prices, [symbol]: price },
-        basePrices: newBasePrices,
-      };
-    }),
-  setAlert: (symbol, price) =>
-    set((state) => ({
-      alerts: { ...state.alerts, [symbol]: price },
-    })),
+          return {
+            prices: { ...state.prices, [symbol]: price },
+            basePrices: newBasePrices,
+          };
+        }),
+      setAlert: (symbol, price) =>
+        set((state) => ({
+          alerts: { ...state.alerts, [symbol]: price },
+        })),
 
-  removeAlert: (symbol) =>
-    set((state) => {
-      const updatedAlerts = { ...state.alerts };
-      delete updatedAlerts[symbol];
-      return { alerts: updatedAlerts };
+      removeAlert: (symbol) =>
+        set((state) => {
+          const updatedAlerts = { ...state.alerts };
+          delete updatedAlerts[symbol];
+          return { alerts: updatedAlerts };
+        }),
     }),
-}));
+    {
+      name: 'stock-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        alerts: state.alerts,
+        basePrices: state.basePrices,
+      }),
+    }
+  )
+);
