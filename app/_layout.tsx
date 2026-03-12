@@ -3,6 +3,9 @@ import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
 import { TamaguiProvider } from 'tamagui';
 
+import { useStockWebSocket } from '@/hooks/useStockWebSocket';
+import { setupNotifications } from '@/services/NotificationService';
+import { useEffect } from 'react';
 import tamaguiConfig from '../tamagui.config';
 
 export const unstable_settings = {
@@ -12,6 +15,11 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  useEffect(() => {
+    setupNotifications();
+  }, []);
+
+  useStockWebSocket();
 
   return (
     <TamaguiProvider
@@ -29,7 +37,10 @@ export default function RootLayout() {
             },
           }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+          <Stack.Screen
+            name="add-alert"
+            options={{ presentation: 'modal', title: 'Set Price Alert' }}
+          />
         </Stack>
       </ThemeProvider>
     </TamaguiProvider>
