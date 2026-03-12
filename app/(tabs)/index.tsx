@@ -1,15 +1,20 @@
 import { Stack } from 'expo-router';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { ScreenContent } from '@/components/ScreenContent';
 
 export default function Home() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Tab One' }} />
+      <Stack.Screen options={{ title: 'Home' }} />
       <View style={styles.container}>
-        <ScreenContent path="app/(tabs)/index.tsx" title="Tab One" />
+        <ScreenContent path="app/(tabs)/index.tsx" title="Welcome to my Stock Tracker App">
+          <Text>
+            Future Roadmap here: A graph for plotting the value of all stocks watched in US dollar
+            value.
+          </Text>
+        </ScreenContent>
       </View>
     </>
   );

@@ -1,7 +1,7 @@
+import { Activity, Home } from '@tamagui/lucide-icons';
 import { Link, Tabs } from 'expo-router';
 
 import { HeaderButton } from '../../components/HeaderButton';
-import { TabBarIcon } from '../../components/TabBarIcon';
 
 export default function TabLayout() {
   return (
@@ -12,20 +12,20 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
-          ),
+          title: 'Home',
+          tabBarIcon: ({ color }) => <Home color={color} />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="watchlist"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Watchlist',
+          tabBarIcon: ({ color }) => <Activity color={color} />,
+          headerRight: () => (
+            <Link href="/add-alert" asChild>
+              <HeaderButton />
+            </Link>
+          ),
         }}
       />
     </Tabs>
