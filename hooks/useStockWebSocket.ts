@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import { sendPriceAlert } from '../services/NotificationService';
 import { useStockStore } from '../store/useStockStore';
 
@@ -15,7 +16,9 @@ export const useStockWebSocket = (symbols: string[] = DEFAULT_SYMBOLS) => {
     alertsRef.current = alerts;
   }, [alerts]);
 
-  useEffect(() => {
+  const connect = () => {
+    if (socket.current?.readyState === WebSocket.OPEN) return;
+
     socket.current = new WebSocket(WS_URL);
 
     socket.current.onopen = () => {
@@ -44,7 +47,24 @@ export const useStockWebSocket = (symbols: string[] = DEFAULT_SYMBOLS) => {
         }
       }
     };
+  };
 
-    return () => socket.current?.close();
+  useEffect(() => {
+    connect();
+
+    // Handle AppState changes (Foreground/Background) to reconnect the socket
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (nextAppState === 'active') {
+        console.info('App back in foreground. Reconnecting...');
+        connect();
+      }
+    };
+
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      subscription.remove();
+      socket.current?.close();
+    };
   }, [symbols]);
 };
